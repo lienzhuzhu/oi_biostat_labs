@@ -1,15 +1,15 @@
 ---
 title: "Getting Started with R and RStudio"
-
 fontsize: 11pt
 geometry: margin=1in
-
 output:
   pdf_document:
     includes:
       in_header: ../header.tex
     fig_width: 5
     fig_height: 3.5
+  html_document:
+    df_print: paged
 ---
 
 \textsf{R} is an open-source statistical language widely used in biostatistics and computational biology, among other fields of research. \textit{RStudio} is a "front end" to \textsf{R} that simplifies important aspects of using \textsf{R} and makes it much easier to work within the \textsf{R} environment. Both \textsf{R} and \textit{RStudio} run identically under the Mac OSX, Microsoft Windows, and Linux.
@@ -36,7 +36,7 @@ The following section introduces the rest of the *RStudio* layout and describes 
 
 2. At its most basic, \textsf{R} can be used as a calculator. Enter \texttt{8 + 3} in the script editor and click the *Run* button at the top right of the script editor to send the command to the console, where the output will appear. Alternatively, with the cursor on the line of code, use the keyboard shortcut Ctrl/Cmd + Enter. Try entering several lines of arithmetic expressions and running them at once. The "\texttt{\#}" symbol marks off text as 'comments', which are not run as code; this is a useful tool for making notes within the code.
 
-    ```{r, eval = FALSE}
+```{r, eval = FALSE}
 #some arithmetic expressions
 8 + 3
 log(2)
@@ -45,7 +45,7 @@ log(2)
 
 3. The previous calculations only produce output in the console. To save a value, assign it a name by using "\texttt{=}". Entering the name of a value will return the value. For example, run:
 
-    ```{r, eval = FALSE}
+```{r, eval = FALSE}
 #create x and y
 x = 8 + 3
 y = log(2)
@@ -62,7 +62,7 @@ z
 
 5. Note that \textsf{R} is case-sensitive; \texttt{x} and \texttt{X} are not the same. If you try to run \texttt{X}, an error will be returned since no value has been named \texttt{X}. If the same name is used again to define a new value, \texttt{R} will overwrite the previous information. For example, redefine \texttt{x}:
 
-    ```{r, eval = FALSE}
+```{r, eval = FALSE}
 #a semicolon (;) can be used to separate commands
 x = 8 + 3; x
 x = 21; x
@@ -70,7 +70,7 @@ x = 21; x
 
 6. Variables can not only contain single values, but also vectors or matrices of values. One simple way to create a vector is to use the \texttt{c()} command:
 
-    ```{r, eval = FALSE}
+```{r, eval = FALSE}
 #define and return vectors a and b
 a = c(4.1, 6.7, 8.2, 1.8); a
 b = 2*a; b
@@ -78,7 +78,7 @@ b = 2*a; b
 
 7. Use \texttt{mean()} and \texttt{sd()} to find the mean and standard deviation of the numbers in \texttt{a}:
 
-    ```{r, eval = FALSE}
+```{r, eval = FALSE}
 #calculate mean and standard deviation
 mean(a)
 sd(a)
@@ -86,7 +86,7 @@ sd(a)
 
 8. Plots appear in the Plots tab in the lower right. Plot the values of \texttt{a} against the values of \texttt{b}:
 
-    ```{r, eval = FALSE}
+```{r, eval = FALSE}
 #plot a against b
 plot(a, b)
 ```
