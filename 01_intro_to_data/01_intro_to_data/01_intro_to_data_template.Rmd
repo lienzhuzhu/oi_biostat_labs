@@ -1,11 +1,13 @@
 ---
 title: "Introduction to Data"
-author: "Chapter 1, Lab 1: Template"
+author: "Lien Zhu"
 date: "OpenIntro Biostatistics"
-
-fontsize: 11pt
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 geometry: margin=1in
-output: pdf_document
+fontsize: 11pt
 ---
 
 \begin{small}
@@ -74,7 +76,7 @@ plot(cdc$weight ~ cdc$height)
 
 Do \texttt{height} and \texttt{weight} appear to be associated?
 
-
+Weak positive correlation.
 
 
 
@@ -89,8 +91,10 @@ The symbol for multiplication in R is the asterisk, *
 
 ```{r}
 #create height.m
+cdc$height.m <- cdc$height * 0.0254
 
 #create weight.kg
+cdc$weight.kg <- cdc$weight * 0.454
 
 ```
 
@@ -106,10 +110,11 @@ The symbol for exponentiation in R is the carat, ^
 
 ```{r, fig.width = 7, fig.height = 5}
 #create bmi
+cdc$bmi <- cdc$weight.kg / (cdc$height.m ^ 2)
 
 
 #plot height and bmi
-
+plot(cdc$height, cdc$bmi)
 ```
 
 
@@ -153,6 +158,7 @@ cdc[ ,6]
 
 ```{r}
 #plot height and weight for the first 100 respondents
+plot(cdc[1:100, "weight"] ~ cdc[1:100, "height"])
 
 ```
 
@@ -188,11 +194,12 @@ nrow(coding.mrna)
 
 ```{r}
 #calculate the 5-number summary
+summary(coding.mrna$transcript_length)
 
 ```
 
 
-
+The maximum of 109224 appears to be an outlier.
 
 
 
@@ -200,12 +207,15 @@ nrow(coding.mrna)
 
 ```{r}
 #create a histogram
+hist(coding.mrna$transcript_length)
 
 
 #create a boxplot
+boxplot(coding.mrna$transcript_length)
 
 
 #calculate summary statistics
+summary(coding.mrna$transcript_length)
 
 
 ```
@@ -221,17 +231,20 @@ Replace the 'a' in the code with the number of your choice, then change FALSE to
 --->
 
 
-```{r, eval = FALSE}
-lengths.subset = subset(coding.mrna, coding.mrna$transcript_length < a)
+```{r, eval = TRUE}
+a <- 5000
+lengths.subset <- subset(coding.mrna, coding.mrna$transcript_length < a)
 ```
 
 With the trimmed data, draw a histogram and boxplot, and calculate summary statistics. Now describe the shape of the data. Explain your choice of where to trim the data.
 		
 ```{r}
 #create a histogram with lengths.subset
+hist(lengths.subset$transcript_length)
 
 
 #create a boxplot with lengths.subset
+boxplot(lengths.subset$transcript_length)
 
 ```
 
@@ -244,6 +257,9 @@ With the trimmed data, draw a histogram and boxplot, and calculate summary stati
 
 ```{r}
 #find how many genes have been trimmed
+num_trimmed <- nrow(coding.mrna) - nrow(lengths.subset)
+#num_trimmed <- nrow(subset(coding.mrna, coding.mrna$transcript_length >= 5000))
+num_trimmed
 
 ```
 
@@ -260,10 +276,11 @@ Using the \texttt{set.seed()} function allows for pseudo-random sampling; that i
 Replace the 'xxxx' in the code with the number of your choice, then change FALSE to TRUE for the output to display in the knitted PDF.
 --->	
 	
-```{r, eval = FALSE}
-set.seed(xxxx)
+```{r, eval = TRUE}
+set.seed(2024)
 sample.size = 0.1 * nrow(coding.mrna)
-transcript.sample = sample(coding.mrna$transcript_length, size = sample.size,
+transcript.sample = sample(coding.mrna$transcript_length, 
+                           size = sample.size,
                            replace = FALSE)
 ```
 
@@ -278,17 +295,20 @@ Change eval = FALSE for the following output to display in the knitted PDF.
 --->
 
 		
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 #calculate the number of transcripts in transcript.sample
 length(transcript.sample)
 
 #calculate five-number summary
+summary(transcript.sample)
 
 
 #create a histogram
+hist(transcript.sample)
 
 
 #create a boxplot
+boxplot(transcript.sample)
 
 
 ```
@@ -311,7 +331,7 @@ boxplot(coding.mrna$transcript_length ~ coding.mrna$chromosome_name)
 
 Select "Show in New Window" above the plot and expand the window to be able to see all the chromosome numbers displayed. Where are the longest transcripts located?
 
-
+The longest transcripts are located on chromosome 2.
 
 
 
@@ -324,12 +344,16 @@ Use \texttt{nrow()} to compare the number of transcripts on chromosome 2 and the
 
 ```{r}
 #chromosome 2 subset
+chr.2 <- subset(coding.mrna, coding.mrna$chromosome_name == "2")
 
 
 #Y chromosome subset
+chr.y <- subset(coding.mrna, coding.mrna$chromosome_name == "Y")
 
 
 #compare the number of transcripts
+nrow(chr.2)
+nrow(chr.y)
 
 ```
 
@@ -393,7 +417,7 @@ boxplot(NHANES$Age)
 ```
 
 
-
+The distribution of ages from the NHANES appears to be roughly uniform with a median and mean around 36 years of age. The maximum age is 80 years old with the youngest participant being a newborn.
 
 
   
@@ -404,12 +428,16 @@ boxplot(NHANES$Age)
 height.in = 0.39*NHANES$Height
 
 #numerical summaries
+summary(height.in)
+mean(height.in, na.rm = TRUE)
 
 #graphical summaries
+boxplot(height.in)
+hist(height.in)
 
 ```
 
-
+The distribution of heights from this sample exhibit a strong left skew with many lower outliers.
 
 
 
@@ -421,7 +449,7 @@ Set eval = TRUE for the results to appear in the knitted PDF.
 --->
 
 
-```{r, eval = FALSE}
+```{r, eval}
 #draw a random sample
 set.seed(5011)
 row.num = sample(1:nrow(NHANES), 200, replace = FALSE)
@@ -431,8 +459,14 @@ nhanes.samp = NHANES[row.num, ]
 plot(nhanes.samp$Age, nhanes.samp$Height)
 
 #investigate age and weight
+plot(nhanes.samp$Age, nhanes.samp$Weight)
 
 ```  
+
+
+It appears to be possible to extract some information about which age participants reach their max height and weight; that age appears to be around 20 years of age.
+
+However, weight appears to be less stable.
 
 
 
@@ -451,6 +485,7 @@ table(adults$Education)  #summary(adults$Education) also works
 total.adults = length(adults$Education) 
 
 #calculations
+nrow(subset(adults, adults$Education == "College Grad")) / total.adults
 
 ```
    
@@ -462,6 +497,8 @@ total.adults = length(adults$Education)
   
 ```{r}
 #calculations
+nrow(subset(adults, adults$Education == "College Grad")) / (total.adults - (nrow(subset(adults, adults$Education == "8th Grade")) + nrow(subset(adults, adults$Education == "9 - 11th Grade")) + nrow(subset(adults, is.na(adults$Education)))) )
+
 
 ```
    
@@ -476,6 +513,9 @@ total.adults = length(adults$Education)
 
 ```{r}
 #numerical summary
+median(NHANES$Poverty, na.rm = TRUE)
+
+IQR(NHANES$Poverty, na.rm = TRUE)
 
 ```
 
@@ -483,6 +523,7 @@ total.adults = length(adults$Education)
 
 ```{r}
 #graphical summary
+boxplot(adults$Poverty ~ adults$Education)
 
 ```
  
@@ -496,6 +537,12 @@ total.adults = length(adults$Education)
 addmargins(table(PhysActive=NHANES$PhysActive, Diabetes=NHANES$Diabetes))
 
 #calculations
+# Diabetes AND Not Physically Active / Not Physically Active
+472 / 3675
+
+# Diabetes AND Physically Active / Physically Active
+285 / 4646
+
 
 ```
 
@@ -510,8 +557,10 @@ From these calculations, is it possible to conclude that being physically active
 
 ```{r}
 #calculations
+(472 / 3675) / (285 / 4646)
 
 ```
 
+Although there is nearly a 2 fold relative risk, it is not possible to conclude that being physically active reduces one's risk of becoming diabetic as there may be confounding variables. An controlled experiment must be conducted in order to make conclusions.
 
 

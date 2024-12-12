@@ -2,16 +2,16 @@
 title: "Lab Notes"
 author: "Chapter 1"
 date: "OpenIntro Biostatistics"
-
-fontsize: 11pt
-geometry: margin=1in
-
 output:
+  html_document:
+    df_print: paged
   pdf_document:
     includes:
       in_header: ../../header.tex
     fig_width: 6.5
     fig_height: 3.5
+geometry: margin=1in
+fontsize: 11pt
 ---
 
 # Overview

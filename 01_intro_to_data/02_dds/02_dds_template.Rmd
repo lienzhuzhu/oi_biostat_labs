@@ -35,7 +35,8 @@ library(oibiostat)
 data("dds.discr")
 
 #produce table of the first five rows
-
+#head(dds.discr)
+dds.discr[1:5,]
 ```
 
 
@@ -46,13 +47,16 @@ a) Describe the distribution of annual expenditures. For most consumers, is the 
   
 ```{r}
 #graphical summaries
+hist(dds.discr$expenditures)
+boxplot(dds.discr$expenditures)
 
 
 #numerical summaries
+summary(dds.discr$expenditures)
 
 ```
 
-
+For most consumers, the amount of financial support is relatively low as the distribution for expenditures is right skewed as evident by the mean > median.
 
 
 
@@ -69,14 +73,18 @@ To make a barplot of a categorical variable, use the plot( ) function. For examp
   
 ```{r}
 #graphical summaries
-
+par(mfrow = c(1, 2))
+plot(dds.discr$age.cohort)
+#boxplot(dds.discr$age)
+hist(dds.discr$age)
 
 #numerical summaries
-
-
+summary(dds.discr$age)
+#addmargins(table(dds.discr$age.cohort , dds.discr$gender))
+table(dds.discr$age.cohort)
 ```
 
-
+The age distribution appears to be rightly skewed.
 
 
 
@@ -87,16 +95,18 @@ c) Is there an equal representation of ethnic groups in this sample of consumers
 
 ```{r}
 #graphical summaries
-
+plot(dds.discr$ethnicity)
 
 #numerical summaries
-
+table(dds.discr$ethnicity)
+prop.table(table(dds.discr$ethnicity))
 
 ```
 
-
-
-
+The consumers from this sample appear to be predominantly Hispanic and Non Hispanic White.
+```{r}
+0.376 + 0.401
+```
 
 
   
@@ -104,13 +114,14 @@ d) Does gender appear to be balanced in this sample of consumers?
   
 ```{r}
 #graphical summaries
-
+plot(dds.discr$gender)
 
 #numerical summaries
-
+prop.table(table(dds.discr$gender))
 
 ```
   
+  Yes, there is a roughly 1:1 ratio between genders.
   
   
   
@@ -129,7 +140,7 @@ The following syntax builds on the basic format of the summary command, using an
 
 ```{r}
 #graphical summaries
-
+boxplot(dds.discr$expenditures ~ dds.discr$age.cohort)
 
 #numerical summaries
 summary(dds.discr$expenditures[dds.discr$age.cohort == "0-5"])
@@ -145,13 +156,14 @@ summary(dds.discr$expenditures[dds.discr$age.cohort == "0-5"])
 
 ```{r}
 #graphical summaries
-
+boxplot(dds.discr$expenditures ~ dds.discr$gender)
 
 #numerical summaries
-
+summary(dds.discr$expenditures[dds.discr$gender == "Female"])
+summary(dds.discr$expenditures[dds.discr$gender == "Male"])
 
 ```
-
+Not really any significant difference between genders.
 
 
 
@@ -160,10 +172,11 @@ summary(dds.discr$expenditures[dds.discr$age.cohort == "0-5"])
 
 ```{r}
 #graphical summaries
+boxplot(dds.discr$expenditures ~ dds.discr$ethnicity)
 
 
 #numerical summaries
-
+tapply(dds.discr$expenditures, dds.discr$ethnicity, summary)
 
 ```
 
@@ -194,11 +207,13 @@ boxplot(dds.discr$expenditures[dds.discr$ethnicity == "Hispanic"],
         names = c("Hispanic", "White not Hispanic"))
 
 #numerical summaries
+summary(dds.discr$expenditures[dds.discr$ethnicity == "Hispanic"])
+summary(dds.discr$expenditures[dds.discr$ethnicity == "White not Hispanic"])
 
 ```
 
 
-
+The median for White's is greater than the 3rd quartile and about the same as the maximum non-outlier for Hispanics.
 
 
 
@@ -210,14 +225,17 @@ When using data to investigate a question, it is important to explore not only h
 
 ```{r}
 #graphical summaries
-
+par(mfrow = c(1,2))
+plot(dds.discr$age.cohort[dds.discr$ethnicity == "Hispanic"])
+plot(dds.discr$age.cohort[dds.discr$ethnicity == "White not Hispanic"])
 
 #numerical summaries
-
+prop.table(table(dds.discr$age.cohort[dds.discr$ethnicity == "Hispanic"]))
+prop.table(table(dds.discr$age.cohort[dds.discr$ethnicity == "White not Hispanic"]))
 
 ```
 
-
+Whites receiving support tend to be disproportionately older than the Hispanics receiving support.
 
 
 
@@ -229,8 +247,14 @@ Recall that a confounding variable is a variable that is associated with the res
 
 ```{r}
 #subset data into two ethnicity groups
+dds.hispanic <- dds.discr[dds.discr$ethnicity == "Hispanic", ]
+dds.white <- dds.discr[dds.discr$ethnicity =="White not Hispanic", ]
 
 #calculate mean expenditures by age cohort for Hispanics
+hisp.means = tapply(dds.hispanic$expenditures, dds.hispanic$age.cohort, mean)
+nonhisp.means = tapply(dds.white$expenditures, dds.white$age.cohort,
+mean)
+nonhisp.means - hisp.means
 
 #calculate mean expenditures by age cohort for White non Hispanics
 
@@ -242,6 +266,7 @@ Recall that a confounding variable is a variable that is associated with the res
 
 9. Based on this exploratory analysis, does there seem to be evidence of ethnic discrimination in the amount of financial support provided by the California DDS? Summarize your findings in language accessible to a non-statistician.
 
+Not really. There appears to be a difference in funding between Hispanic and White consumers, but this may be influenced by the difference in age distribution between these two groups.
 
 
 
@@ -259,6 +284,16 @@ Mean \texttt{expenditures} is higher for Hispanics than White non-Hispanics in a
 
 ```{r}
 #calculations
+hispanic_props <- prop.table(table(dds.discr$age.cohort[dds.discr$ethnicity == "Hispanic"]))
+weighted_hispanic_funds <- hispanic_props * hisp.means
+sum(weighted_hispanic_funds)
 
+white_props <- prop.table(table(dds.discr$age.cohort[dds.discr$ethnicity == "White not Hispanic"]))
+weighted_white_funds <- white_props * nonhisp.means
+sum(weighted_white_funds)
 ```
 
+
+The paradox is explainable by the fact that there is a greater proportion of younger Hispanics than the proportion of younger aged consumers in the White subset. 
+
+Younger consumers tend to receive less funds.
