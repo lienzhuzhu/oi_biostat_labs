@@ -1,21 +1,13 @@
 ---
 title: "Exploratory Data Analysis: Golub Case Study"
-author: "Chapter 1, Lab 3: Template"
-date: "OpenIntro Biostatistics"
+author: Lien Zhu
+date: "`r Sys.Date()`"
 
 fontsize: 11pt
 geometry: margin=1in
 output: pdf_document
 ---
 
-<!---
-NOTES:
-
-- Remember to change eval = FALSE to eval = TRUE for all results to appear in the knitted pdf.
-
-- When typing probe names that contain an underscore symbol (e.g., M86752_at), it is necessary to include a backwards slash (\) before the hyphen to allow the pdf to knit.
-
---->
 
 
 This lab presents the details of how to conduct the analysis discussed in Section 1.7.2 of \textit{OpenIntro Biostatistics}. We recommend that a reader carefully review the material in the text prior to working through the lab, as the lab will focus on demonstrating techniques in \textsf{R} rather than reviewing the conceptual strategy behind the analysis. 
@@ -70,7 +62,7 @@ a) What are the first five values of \texttt{gene.index.set}? How were the numbe
 
 ```{r}
 #view gene.index.set
-
+gene.index.set[1:5]
 ```
 
 
@@ -80,26 +72,30 @@ a) What are the first five values of \texttt{gene.index.set}? How were the numbe
 
 b) Why is it important to sample without replacement?
 
+It is important to sample without replacement to avoid picking the same genes.
 
-
-
+Selecting the same genes would decrease the number of factors in the training.
 
 
 
 c) View \texttt{gene.matrix.sample}; what does it contain? How is \texttt{gene.matrix.sample} related to \texttt{gene.index.set}?
 
-```{r}
+```{r, eval=FALSE}
 #view gene.matrix.sample
-
+View(gene.matrix.sample)
+gene.matrix.sample
 ```
 
-
+gene.index.set contains the 100 indices of genes that are included as the column names in the gene.matrix.sample sample of the golub.train gene.matrix.
 
 
 
 d) What are the first five gene names of the 100 genes sampled?
 
-
+```{r}
+selected.genes <- colnames(gene.matrix.sample)[1:5]
+selected.genes
+```
 
 
 
@@ -109,10 +105,10 @@ e) Plot a histogram showing the distribution of the expression levels of the sec
 
 ```{r}
 #plot a histogram
-
+hist(gene.matrix.sample[,2])
 ```
 
-
+Unimodal with slight right skew.
 
 
 
@@ -131,12 +127,14 @@ sum(leuk.type)
 
 a) When creating the logical variable, why not write \texttt{"allT"} or \texttt{"allB"} instead of \texttt{"aml"}?
 
-
+We use AML as the variable condition because there is only a single group of AML patients, but ALL can be classified into ALL-B or ALL-T, which we group together into ALL for this study.
 
 
 
 
 b) How many patients have AML? How many have ALL?
+
+42 patients have ALL and 20 patients have AML.
 
 
 

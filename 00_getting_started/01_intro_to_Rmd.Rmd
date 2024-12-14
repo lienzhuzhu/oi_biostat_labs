@@ -76,7 +76,7 @@ R programs in an Rmd file are located in **code chunks**, which appear as grey-s
 
 6. Datasets for the labs are contained within the *oibiostat* package. To view which datasets are included in the package, go to the "Packages" tab and scroll down to *oibiostat*; clicking the blue hyperlink opens the documentation page that lists the datasets included in the package.
 
-7. The following code chunks use data included in the package. To load the package, use the \texttt{library} command. This command only needs to be used once in a document, in the first R chunk that requires data from the package. The \texttt{data()} command can be used to load a particular dataset from the package; once the command is run, the name of the dataset will appear in the Environment tab.
+7. The following code chunks use data included in the package. To load the package, use the $\texttt{library}$ command. This command only needs to be used once in a document, in the first R chunk that requires data from the package. The \texttt{data()} command can be used to load a particular dataset from the package; once the command is run, the name of the dataset will appear in the Environment tab.
 
 ```{r}
 library(oibiostat)   #loads the package
@@ -142,4 +142,4 @@ An R Script file can be thought of as one large code chunk; R script files are o
 
 R script files are useful when the primary goal is to explore a dataset or test short R programs. R Markdown files are ideal for preparing documents that need to contain both explanatory text and statistical output, such as a lab report. 
 
-Congratulations! You have reached the end of Lab 0. 
+Congratulations! You have reached the end of Lab 0.
